@@ -1,0 +1,40 @@
+# Thank you for looking at our code. Please cite our work when you use this code, thanks
+# Database (you can find it in our repository https://github.com/adgfo/Gomez-Flores-etal_12)
+import pandas as pd
+df=pd.read_csv('Gomez-Flores_et_al_Database1.csv')
+df=df[['t', 'rpm', 'dp', 'db', 'rhop', 'thetap', 'mu', 'EB_bp', 'Jb', 'U1', 'U2', 'ep1', 'ep2', 'Sb', 'kp', 'Pk', 'Rp', 'Re']]
+# Data processing
+from sklearn.preprocessing import MinMaxScaler
+xScaler=MinMaxScaler(feature_range=(0, 1))
+yScaler=MinMaxScaler(feature_range=(0, 1))
+x=xScaler.fit_transform(df[['t', 'rpm', 'dp', 'db', 'rhop', 'thetap', 'mu', 'EB_bp', 'Jb']]) # Input x
+y=yScaler.fit_transform(df[['U1', 'U2', 'ep1', 'ep2', 'Sb', 'kp', 'Pk']]) # Target y
+x=x.reshape(x.shape[0], 1, x.shape[1])
+# Insert Rp and Re in target y
+import numpy as np
+y=np.append(y, df[['Rp', 'Re']], axis=1)
+# LSTM modeling
+from keras.models import Sequential
+from keras.layers import LSTM
+from keras.layers import Dropout
+from keras.layers import Dense
+size=1729
+model=Sequential()
+model.add(LSTM(units=819, return_sequences=True, input_shape=(x[:size,:].shape[1], x[:size,:].shape[2])))
+model.add(Dropout(0.3))
+model.add(LSTM(units=819, return_sequences=True))
+model.add(Dropout(0.3))
+model.add(LSTM(units=819, return_sequences=False))
+model.add(Dropout(0.3))
+model.add(Dense(units=y[:size,:].shape[1], activation='linear', kernel_initializer='random_normal', bias_initializer='random_normal'))
+model.compile(optimizer='adam', loss='mean_squared_error')
+loss_t_histories=[]
+loss_v_histories=[]
+for i in range(5):
+    # Train
+    history=model.fit(x[:size,:], y[:size,:], epochs=1400, batch_size=x[:size,:].shape[0], validation_data=(x[size:,:], y[size:,:]), shuffle=False, verbose=0)
+    # Test
+    loss_v=model.evaluate(x[size:,:], y[size:,:], verbose=0)    
+    # Loss histories
+    loss_t_histories.append(history.history['loss'])
+    loss_v_histories.append(history.history['val_loss'])
