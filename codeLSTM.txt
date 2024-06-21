@@ -1,20 +1,20 @@
-# Thank you for looking at our code. Please cite our work when you use this code, thanks
-# Database (you can find it in our repository https://github.com/adgfo/Gomez-Flores-etal_12)
-import pandas as pd
+### Thank you for looking at our code. Please cite our work when you use this code, thanks
+### 1. Database (you can find it in our repository https://github.com/adgfo/Gomez-Flores-etal_12)
+import pandas as pd # pd version 2.1.4
 df=pd.read_csv('Gomez-Flores_et_al_Database1.csv')
 df=df[['t', 'rpm', 'dp', 'db', 'rhop', 'thetap', 'mu', 'EB_bp', 'Jb', 'U1', 'U2', 'ep1', 'ep2', 'Sb', 'kp', 'Pk', 'Rp', 'Re']]
-# Data processing
-from sklearn.preprocessing import MinMaxScaler
+### 2.1. Data processing
+from sklearn.preprocessing import MinMaxScaler # scikit-learn version 1.3.0
 xScaler=MinMaxScaler(feature_range=(0, 1))
 yScaler=MinMaxScaler(feature_range=(0, 1))
 x=xScaler.fit_transform(df[['t', 'rpm', 'dp', 'db', 'rhop', 'thetap', 'mu', 'EB_bp', 'Jb']]) # Input x
 y=yScaler.fit_transform(df[['U1', 'U2', 'ep1', 'ep2', 'Sb', 'kp', 'Pk']]) # Target y
 x=x.reshape(x.shape[0], 1, x.shape[1])
-# Insert Rp and Re in target y
-import numpy as np
+### 2.2. Insert Rp and Re in target y
+import numpy as np # np version 1.26.2
 y=np.append(y, df[['Rp', 'Re']], axis=1)
-# LSTM modeling
-from keras.models import Sequential
+### 3. LSTM modeling
+from keras.models import Sequential # keras version 2.10.0
 from keras.layers import LSTM
 from keras.layers import Dropout
 from keras.layers import Dense
@@ -31,10 +31,20 @@ model.compile(optimizer='adam', loss='mean_squared_error')
 loss_t_histories=[]
 loss_v_histories=[]
 for i in range(5):
-    # Train
+    # 3.1. Train
     history=model.fit(x[:size,:], y[:size,:], epochs=1400, batch_size=x[:size,:].shape[0], validation_data=(x[size:,:], y[size:,:]), shuffle=False, verbose=0)
-    # Test
+    # 3.2. Test
     loss_v=model.evaluate(x[size:,:], y[size:,:], verbose=0)    
-    # Loss histories
+    # 3.3. Loss histories
     loss_t_histories.append(history.history['loss'])
     loss_v_histories.append(history.history['val_loss'])
+### 4.1 Validation database
+toPred=pd.read_csv('Gomez-Flores_et_al_Database2.csv') # (database in our repository https://github.com/adgfo/Gomez-Flores-etal_12)
+toPred['R']=toPred['R']/100
+xNew=xScaler.transform(toPred[['t', 'rpm', 'dp', 'db', 'rhop', 'thetap', 'mu', 'EB_bp', 'Jb']])
+xNew=xNew.reshape(xNew.shape[0], 1, xNew.shape[1])
+### Model validation
+yNew=model.predict(xNew)
+yPred=yScaler.inverse_transform(yNew[:, [0, 1, 2, 3, 4, 5, 6]])
+yPred=np.append(yPred, yNew[:, [7,8]], axis=1)
+R=yPred[:, -2]+yPred[:, -1]
