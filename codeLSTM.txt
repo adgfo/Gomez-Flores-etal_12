@@ -38,7 +38,7 @@ for i in range(5):
     ### 3.3. Loss histories
     loss_t_histories.append(history.history['loss'])
     loss_v_histories.append(history.history['val_loss'])
-### 4 Validation database
+### 4. Validation database
 toPred=pd.read_csv('Gomez-Flores_et_al_Database2.csv') # (database in our repository https://github.com/adgfo/Gomez-Flores-etal_12)
 toPred['R']=toPred['R']/100
 xNew=xScaler.transform(toPred[['t', 'rpm', 'dp', 'db', 'rhop', 'thetap', 'mu', 'EB_bp', 'Jb']])
