@@ -31,11 +31,11 @@ model.compile(optimizer='adam', loss='mean_squared_error')
 loss_t_histories=[]
 loss_v_histories=[]
 for i in range(5):
-    # 3.1. Train
+    ### 3.1. Train
     history=model.fit(x[:size,:], y[:size,:], epochs=1400, batch_size=x[:size,:].shape[0], validation_data=(x[size:,:], y[size:,:]), shuffle=False, verbose=0)
-    # 3.2. Test
+    ### 3.2. Test
     loss_v=model.evaluate(x[size:,:], y[size:,:], verbose=0)    
-    # 3.3. Loss histories
+    ### 3.3. Loss histories
     loss_t_histories.append(history.history['loss'])
     loss_v_histories.append(history.history['val_loss'])
 ### 4 Validation database
