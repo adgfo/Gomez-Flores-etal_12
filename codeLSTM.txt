@@ -14,7 +14,9 @@ x=x.reshape(x.shape[0], 1, x.shape[1])
 import numpy as np # np version 1.26.2
 y=np.append(y, df[['Rp', 'Re']], axis=1)
 ### 3. LSTM modeling
-from keras.models import Sequential # keras version 2.10.0 and tensorflow version 2.10.1
+import tensorflow as tf # tensorflow version 2.10.1
+from tensorflow import keras # keras version 2.10.0
+from keras.models import Sequential
 from keras.layers import LSTM
 from keras.layers import Dropout
 from keras.layers import Dense
