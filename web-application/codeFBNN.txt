@@ -1,0 +1,20 @@
+### Please cite our work when you use this code, thanks
+### 1. Libraries
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.neural_network import MLPRegressor
+from sklearn.metrics import mean_squared_error
+### 2. Database (you can dowload it from the repository https://github.com/adgfo/Gomez-Flores-etal_12)
+df=pd.read_csv('Gomez_et_al_Database1.csv')
+df=df[['t', 'rpm', 'dp', 'db', 'rhop', 'thetap', 'mu', 'EB_bp', 'Jb', 'U1', 'U2', 'ep1', 'ep2', 'Sb', 'kp', 'Pk', 'Rp', 'Re']]
+### 3. Scale
+xScaler=MinMaxScaler(feature_range=(0, 1))
+yScaler=MinMaxScaler(feature_range=(0, 1))
+x=xScaler.fit_transform(df[['t', 'rpm', 'dp', 'db', 'rhop', 'thetap', 'mu', 'EB_bp', 'Jb']]) # Input x
+y=yScaler.fit_transform(df[['U1', 'U2', 'ep1', 'ep2', 'Sb', 'kp', 'Pk']]) # Target y
+### 4. Insert Rp and Re in target y
+y=np.append(y, df[['Rp', 'Re']], axis=1)
+### 5. Neural network
+model=MLPRegressor(hidden_layer_sizes=(100, 75, 50, 25), activation='relu', solver='adam', learning_rate='adaptive', max_iter=7000, random_state=1234, early_stopping=True, validation_fraction=0.05, n_iter_no_change=700)
+model.fit(x, y)
