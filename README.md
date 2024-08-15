@@ -6,8 +6,8 @@ The repository includes three folders: **databases**, **LSTM**, and **web-applic
 ## databases
 
 *The two databases used in the paper are provided in this folder.*
-Training and testing database: 
-Validation database:
+
+The two databases are Gomez-Flores_et_al_Database1.csv (training and testing database) and Gomez-Flores_et_al_Database2.csv (validation database).
 
 ## LSTM
 
