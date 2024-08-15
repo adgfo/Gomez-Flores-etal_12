@@ -12,11 +12,13 @@ The two databases are Gomez-Flores_et_al_Database1.csv (training and testing dat
 ## LSTM
 
 *A code for the machine learning model is provided in this folder.* The machine learning model is a deep **long short-term memory (LSTM)** neural network.
-The code includes database loading, database scaling, LSTM setting up, and prediction.
+
+The code includes package versions, database loading, database scaling, LSTM setting up, and prediction.
 
 ## web-application
 
 *The link to access the free web app of the Flotation Module is provided in this folder.*
+
 This folder also contains trained scalers, trained machine learning model, and images used in the web app.
 
 # Thanks for visiting =)
