@@ -1,6 +1,6 @@
 # Flotation separation of lithium-ion battery electrodes predicted by a long short-term memory network using data from physicochemical kinetic simulations and experiments
 
-This repository provides relevant files referenced in **[our paper](https://dashing-nubian-spitting-cobra.anacondaapps.cloud/)** (link will be updated when paper is published). Feel free to use the files, but please acknowledge their source by citing this repository and/or the paper.
+This repository provides relevant files referenced in **[our paper](https://dashing-nubian-spitting-cobra.anacondaapps.cloud/)** (link will be updated when the paper is published). Feel free to use the files, but please acknowledge their source by citing this repository and/or the paper.
 The repository includes three folders: **databases**, **LSTM**, and **web-application**.
 
 ## databases
