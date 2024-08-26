@@ -29,7 +29,7 @@ from keras.layers import Dropout
 from keras.layers import Dense
 
 size = 1729
-model=Sequential()
+model = Sequential()
 model.add(LSTM(units=819, return_sequences=True, input_shape=(x[:size,:].shape[1], x[:size,:].shape[2]))) # First layer (input layer)
 model.add(Dropout(0.3))
 model.add(LSTM(units=819, return_sequences=True)) # Second layer
